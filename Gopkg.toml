@@ -1,0 +1,16 @@
+# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# for detailed Gopkg.toml documentation.
+
+[[constraint]]
+  name = "github.com/graph-gophers/graphql-go"
+  source = "github.com/matiasanaya/graphql-go"
+  branch = "feature/support-subscriptions"
+
+[[constraint]]
+  name = "github.com/functionalfoundry/graphqlws"
+  source = "github.com/matiasanaya/graphqlws"
+  branch = "feature/support-graph-gophers-graphql-go"
+
+[prune]
+  go-tests = true
+  unused-packages = true
