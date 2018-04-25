@@ -5,7 +5,7 @@
   branch = "feature/support-graph-gophers-graphql-go"
   name = "github.com/functionalfoundry/graphqlws"
   packages = ["."]
-  revision = "6db579d546372ef2a18f5f5621794350458e6bfb"
+  revision = "9fd5e7a0e47fc9b9bd035a520ae60ca98028b457"
   source = "github.com/matiasanaya/graphqlws"
 
 [[projects]]
