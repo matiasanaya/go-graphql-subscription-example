@@ -78,7 +78,7 @@ func newSubscriptionsManager(s *graphql.Schema) *subscriptionsManager {
 func (m *subscriptionsManager) initSubscriptions(subscriptions <-chan *graphqlws.Subscription) {
 	for subscription := range subscriptions {
 		ctx := context.Background()
-		c := m.s.Subscribe(ctx, subscription.Query, subscription.OperationName, subscription.Variables)
+		c, _ := m.s.Subscribe(ctx, subscription.Query, subscription.OperationName, subscription.Variables)
 
 		localSubscription := subscription
 		go func() {
@@ -106,7 +106,7 @@ func (r *helloResolver) Hello() string {
 	return "Hello world"
 }
 
-func (r *helloResolver) HelloSaid() chan *helloSaidEventResolver {
+func (r *helloResolver) HelloSaid() (chan *helloSaidEventResolver, chan<- struct{}) {
 	c := make(chan *helloSaidEventResolver)
 	go func() {
 		ticker := time.NewTicker(1 * time.Second)
@@ -117,7 +117,7 @@ func (r *helloResolver) HelloSaid() chan *helloSaidEventResolver {
 		}
 	}()
 
-	return c
+	return c, make(chan<- struct{})
 }
 
 type helloSaidEventResolver struct {

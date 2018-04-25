@@ -39,7 +39,7 @@
     "relay",
     "trace"
   ]
-  revision = "f627b36a9ad558faaab8b102492acd1e6bc17339"
+  revision = "fc957af4284f9e9989047633e8bbcfe22ed0a275"
   source = "github.com/matiasanaya/graphql-go"
 
 [[projects]]
