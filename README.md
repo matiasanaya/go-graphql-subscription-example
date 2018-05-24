@@ -17,6 +17,18 @@ Navigate to [localhost:8080](http://localhost:8080) and use GraphiQL to subscrib
 ```
 subscription onHelloSaid {
   helloSaid {
+    id
+    msg
+  }
+}
+```
+
+On a separate tab run:
+
+```
+query SayHello{
+  hello(msg: "Hello world!") {
+    id
     msg
   }
 }

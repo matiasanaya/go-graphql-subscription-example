@@ -21,7 +21,7 @@
   version = "v1.2.0"
 
 [[projects]]
-  branch = "feature/support-subscriptions"
+  branch = "feature/subscriptions"
   name = "github.com/graph-gophers/graphql-go"
   packages = [
     ".",
@@ -39,7 +39,7 @@
     "relay",
     "trace"
   ]
-  revision = "fc957af4284f9e9989047633e8bbcfe22ed0a275"
+  revision = "cb1a8ec3ce857d5e8b77abae4c75942d473a716b"
   source = "github.com/matiasanaya/graphql-go"
 
 [[projects]]
@@ -106,6 +106,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f36868cc58c0ea3cd9d16864c029d222278d5fddf9b1a87b9e5fdbad2e5a1f65"
+  inputs-digest = "4d914821286031dd49af82fbbe4bcdbaaf563a07ec6c8898b0c9181d45ea4cb5"
   solver-name = "gps-cdcl"
   solver-version = 1

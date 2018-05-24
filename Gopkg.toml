@@ -4,7 +4,7 @@
 [[constraint]]
   name = "github.com/graph-gophers/graphql-go"
   source = "github.com/matiasanaya/graphql-go"
-  branch = "feature/support-subscriptions"
+  branch = "feature/subscriptions"
 
 [[constraint]]
   name = "github.com/functionalfoundry/graphqlws"

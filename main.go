@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"time"
 
@@ -22,10 +23,11 @@ const schema = `
   }
 
   type Query {
-    hello: String!
+    hello(msg: String!): HelloSaidEvent!
   }
 
   type HelloSaidEvent {
+		id: String!
     msg: String!
   }
 `
@@ -35,7 +37,7 @@ func main() {
 	http.HandleFunc("/", http.HandlerFunc(graphiql))
 
 	// init graphQL schema
-	s, err := graphql.ParseSchema(schema, &helloResolver{})
+	s, err := graphql.ParseSchema(schema, newResolver())
 	if err != nil {
 		panic(err)
 	}
@@ -100,32 +102,50 @@ func (m *subscriptionsManager) initSubscriptions(subscriptions <-chan *graphqlws
 	}
 }
 
-type helloResolver struct{}
-
-func (r *helloResolver) Hello() string {
-	return "Hello world"
+type resolver struct {
+	helloSaidEvents chan *helloSaidEvent
 }
 
-func (r *helloResolver) HelloSaid() (chan *helloSaidEventResolver, chan<- struct{}) {
-	c := make(chan *helloSaidEventResolver)
+func newResolver() *resolver {
+	return &resolver{helloSaidEvents: make(chan *helloSaidEvent)}
+}
+
+func (r *resolver) Hello(args struct{ Msg string }) *helloSaidEvent {
+	e := &helloSaidEvent{msg: args.Msg, id: randomID()}
 	go func() {
-		ticker := time.NewTicker(1 * time.Second)
-		for t := range ticker.C {
-			c <- &helloSaidEventResolver{
-				msg: fmt.Sprintf("Hello world @%d", t.Unix()),
-			}
+		select {
+		case r.helloSaidEvents <- e:
+		case <-time.After(1 * time.Second):
 		}
 	}()
-
-	return c, make(chan<- struct{})
+	return e
 }
 
-type helloSaidEventResolver struct {
+func (r *resolver) HelloSaid() chan *helloSaidEvent {
+	return r.helloSaidEvents
+}
+
+type helloSaidEvent struct {
+	id  string
 	msg string
 }
 
-func (r *helloSaidEventResolver) Msg() string {
+func (r *helloSaidEvent) Msg() string {
 	return r.msg
+}
+
+func (r *helloSaidEvent) ID() string {
+	return r.id
+}
+
+func randomID() string {
+	var letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+	b := make([]rune, 16)
+	for i := range b {
+		b[i] = letter[rand.Intn(len(letter))]
+	}
+	return string(b)
 }
 
 var graphiql = func(w http.ResponseWriter, r *http.Request) {
