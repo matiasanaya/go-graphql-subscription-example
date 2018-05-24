@@ -26,8 +26,8 @@ subscription onHelloSaid {
 On a separate tab run:
 
 ```
-query SayHello{
-  hello(msg: "Hello world!") {
+mutation SayHello{
+  sayHello(msg: "Hello world!") {
     id
     msg
   }

@@ -13,23 +13,28 @@ import (
 )
 
 const schema = `
-  schema {
-      subscription: Subscription
-      query: Query
-  }
+	schema {
+		subscription: Subscription
+		mutation: Mutation
+		query: Query
+	}
 
-  type Subscription {
-    helloSaid(): HelloSaidEvent!
-  }
+	type Query {
+		hello: String!
+	}
 
-  type Query {
-    hello(msg: String!): HelloSaidEvent!
-  }
+	type Subscription {
+		helloSaid(): HelloSaidEvent!
+	}
 
-  type HelloSaidEvent {
+	type Mutation {
+		sayHello(msg: String!): HelloSaidEvent!
+	}
+
+	type HelloSaidEvent {
 		id: String!
-    msg: String!
-  }
+		msg: String!
+	}
 `
 
 func main() {
@@ -110,7 +115,11 @@ func newResolver() *resolver {
 	return &resolver{helloSaidEvents: make(chan *helloSaidEvent)}
 }
 
-func (r *resolver) Hello(args struct{ Msg string }) *helloSaidEvent {
+func (r *resolver) Hello() string {
+	return "Hello world!"
+}
+
+func (r *resolver) SayHello(args struct{ Msg string }) *helloSaidEvent {
 	e := &helloSaidEvent{msg: args.Msg, id: randomID()}
 	go func() {
 		select {
@@ -121,7 +130,7 @@ func (r *resolver) Hello(args struct{ Msg string }) *helloSaidEvent {
 	return e
 }
 
-func (r *resolver) HelloSaid() chan *helloSaidEvent {
+func (r *resolver) HelloSaid() <-chan *helloSaidEvent {
 	return r.helloSaidEvents
 }
 
