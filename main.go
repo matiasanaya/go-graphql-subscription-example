@@ -1,8 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"html/template"
 	"math/rand"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 
 	graphql "github.com/graph-gophers/graphql-go"
@@ -35,6 +39,19 @@ const schema = `
 	}
 `
 
+var httpPort = 8080
+
+func init() {
+	port := os.Getenv("HTTP_PORT")
+	if port != "" {
+		var err error
+		httpPort, err = strconv.Atoi(port)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
 func main() {
 	// graphiql handler
 	http.HandleFunc("/", http.HandlerFunc(graphiql))
@@ -54,7 +71,7 @@ func main() {
 	http.HandleFunc("/subscriptions", subscriptionHandler.ServeHTTP)
 
 	// start HTTP server
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", httpPort), nil); err != nil {
 		panic(err)
 	}
 }
@@ -110,7 +127,7 @@ func randomID() string {
 }
 
 var graphiql = func(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(`
+	t := template.Must(template.New("graphiql").Parse(`
   <!DOCTYPE html>
   <html>
        <head>
@@ -141,7 +158,7 @@ var graphiql = func(w http.ResponseWriter, r *http.Request) {
                                });
                        }
 
-                       var subscriptionsClient = new window.SubscriptionsTransportWs.SubscriptionClient('ws://localhost:8080/subscriptions', { reconnect: true });
+                       var subscriptionsClient = new window.SubscriptionsTransportWs.SubscriptionClient('ws://localhost:{{ . }}/subscriptions', { reconnect: true });
                        var subscriptionsFetcher = window.GraphiQLSubscriptionsFetcher.graphQLFetcher(subscriptionsClient, graphQLFetcher);
 
                        ReactDOM.render(
@@ -152,4 +169,5 @@ var graphiql = func(w http.ResponseWriter, r *http.Request) {
        </body>
   </html>
   `))
+	t.Execute(w, httpPort)
 }
