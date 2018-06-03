@@ -1,15 +1,13 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"math/rand"
 	"net/http"
 	"time"
 
-	"github.com/functionalfoundry/graphqlws"
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
+	"github.com/matiasanaya/go-graphql-subscription-example/graphqlwshandler"
 )
 
 const schema = `
@@ -52,58 +50,12 @@ func main() {
 	http.HandleFunc("/graphql", queryHandler.ServeHTTP)
 
 	// graphQL subscription handler
-	m := newSubscriptionsManager(s)
-	subscriptionHandler := graphqlws.NewHandler(graphqlws.HandlerConfig{SubscriptionManager: m})
+	subscriptionHandler := graphqlwshandler.NewDefaultHandler(s)
 	http.HandleFunc("/subscriptions", subscriptionHandler.ServeHTTP)
 
 	// start HTTP server
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		panic(err)
-	}
-}
-
-type subscriptionsManager struct {
-	graphqlws.SubscriptionManager
-	s *graphql.Schema
-}
-
-func newSubscriptionsManager(s *graphql.Schema) *subscriptionsManager {
-	c := make(chan *graphqlws.Subscription)
-	m := subscriptionsManager{
-		s: s,
-		SubscriptionManager: graphqlws.NewSubscriptionManager(
-			func(subscription *graphqlws.Subscription) {
-				c <- subscription
-			},
-		),
-	}
-	go m.initSubscriptions(c)
-
-	return &m
-}
-
-func (m *subscriptionsManager) initSubscriptions(subscriptions <-chan *graphqlws.Subscription) {
-	for subscription := range subscriptions {
-		ctx := context.Background()
-		c, _ := m.s.Subscribe(ctx, subscription.Query, subscription.OperationName, subscription.Variables)
-
-		localSubscription := subscription
-		go func() {
-			for {
-				select {
-				case <-localSubscription.StopCh():
-					fmt.Println("Should shutdown upstream sub:", localSubscription.ID)
-					return
-				case resp := <-c:
-					data := graphqlws.DataMessagePayload{
-						Data: resp.Data,
-						// TODO: send errors
-						// Errors: resp.Errors,
-					}
-					localSubscription.SendData(&data)
-				}
-			}
-		}()
 	}
 }
 
