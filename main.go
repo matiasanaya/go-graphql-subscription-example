@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html/template"
 	"math/rand"
@@ -77,11 +78,19 @@ func main() {
 }
 
 type resolver struct {
-	helloSaidEvents chan *helloSaidEvent
+	helloSaidEvents     chan *helloSaidEvent
+	helloSaidSubscriber chan *helloSaidSubscriber
 }
 
 func newResolver() *resolver {
-	return &resolver{helloSaidEvents: make(chan *helloSaidEvent)}
+	r := &resolver{
+		helloSaidEvents:     make(chan *helloSaidEvent),
+		helloSaidSubscriber: make(chan *helloSaidSubscriber),
+	}
+
+	go r.broadcastHelloSaid()
+
+	return r
 }
 
 func (r *resolver) Hello() string {
@@ -99,8 +108,50 @@ func (r *resolver) SayHello(args struct{ Msg string }) *helloSaidEvent {
 	return e
 }
 
-func (r *resolver) HelloSaid() <-chan *helloSaidEvent {
-	return r.helloSaidEvents
+type helloSaidSubscriber struct {
+	stop   <-chan struct{}
+	events chan<- *helloSaidEvent
+}
+
+func (r *resolver) broadcastHelloSaid() {
+	subscribers := map[string]*helloSaidSubscriber{}
+	unsubscribe := make(chan string)
+
+	// NOTE: subscribing and sending events are at odds.
+	for {
+		select {
+		case id := <-unsubscribe:
+			delete(subscribers, id)
+		case s := <-r.helloSaidSubscriber:
+			subscribers[randomID()] = s
+		case e := <-r.helloSaidEvents:
+			for id, s := range subscribers {
+				go func(id string, s *helloSaidSubscriber) {
+					select {
+					case <-s.stop:
+						unsubscribe <- id
+						return
+					default:
+					}
+
+					select {
+					case <-s.stop:
+						unsubscribe <- id
+					case s.events <- e:
+					case <-time.After(time.Second):
+					}
+				}(id, s)
+			}
+		}
+	}
+}
+
+func (r *resolver) HelloSaid(ctx context.Context) <-chan *helloSaidEvent {
+	c := make(chan *helloSaidEvent)
+	// NOTE: this could take a while
+	r.helloSaidSubscriber <- &helloSaidSubscriber{events: c, stop: ctx.Done()}
+
+	return c
 }
 
 type helloSaidEvent struct {
