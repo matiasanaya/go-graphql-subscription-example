@@ -7,9 +7,8 @@
   branch = "feature/subscriptions"
 
 [[constraint]]
-  name = "github.com/functionalfoundry/graphqlws"
-  source = "github.com/matiasanaya/graphqlws"
-  branch = "feature/support-graph-gophers-graphql-go"
+  name = "github.com/matiasanaya/graphql-transport-ws"
+  revision = "0c66d79b1c7623d4335c3b6e17090ebf15ce5ef3"
 
 [prune]
   go-tests = true
