@@ -3,11 +3,27 @@ package graphqlwshandler
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 
+	"github.com/gorilla/websocket"
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/matiasanaya/graphql-transport-ws/graphqlws"
 	"github.com/matiasanaya/graphql-transport-ws/graphqlws/event"
 )
+
+// NewHandler returns a new Handler that supports both websocket and http transports
+func NewHandler(s *graphql.Schema, httpHandler http.Handler) http.HandlerFunc {
+	wsHandler := NewDefaultHandler(s)
+	return func(w http.ResponseWriter, r *http.Request) {
+		for _, subprotocol := range websocket.Subprotocols(r) {
+			if subprotocol == "graphql-ws" {
+				wsHandler.ServeHTTP(w, r)
+				return
+			}
+		}
+		httpHandler.ServeHTTP(w, r)
+	}
+}
 
 // NewDefaultHandler returns a new Handler with default callbacks
 func NewDefaultHandler(s *graphql.Schema) *graphqlws.Handler {

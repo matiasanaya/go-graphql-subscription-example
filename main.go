@@ -63,13 +63,9 @@ func main() {
 		panic(err)
 	}
 
-	// graphQL query & mutation handler
-	queryHandler := &relay.Handler{Schema: s}
-	http.HandleFunc("/graphql", queryHandler.ServeHTTP)
-
-	// graphQL subscription handler
-	subscriptionHandler := graphqlwshandler.NewDefaultHandler(s)
-	http.HandleFunc("/subscriptions", subscriptionHandler.ServeHTTP)
+	// graphQL handler
+	graphQLHandler := graphqlwshandler.NewHandler(s, &relay.Handler{Schema: s})
+	http.HandleFunc("/graphql", graphQLHandler)
 
 	// start HTTP server
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", httpPort), nil); err != nil {
@@ -209,7 +205,7 @@ var graphiql = func(w http.ResponseWriter, r *http.Request) {
                                });
                        }
 
-                       var subscriptionsClient = new window.SubscriptionsTransportWs.SubscriptionClient('ws://localhost:{{ . }}/subscriptions', { reconnect: true });
+                       var subscriptionsClient = new window.SubscriptionsTransportWs.SubscriptionClient('ws://localhost:{{ . }}/graphql', { reconnect: true });
                        var subscriptionsFetcher = window.GraphiQLSubscriptionsFetcher.graphQLFetcher(subscriptionsClient, graphQLFetcher);
 
                        ReactDOM.render(
