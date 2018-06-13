@@ -39,9 +39,15 @@ func newDefaultCallback(schema *graphql.Schema) *defaultCallback {
 }
 
 func (h *defaultCallback) OnOperation(ctx context.Context, args *event.OnOperationArgs) (json.RawMessage, func(), error) {
+	b, err := json.Marshal(args.StartMessage.Variables)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	variables := map[string]interface{}{}
-	for k, v := range args.StartMessage.Variables {
-		variables[k] = v
+	err = json.Unmarshal(b, &variables)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	ctx, cancel := context.WithCancel(ctx)
