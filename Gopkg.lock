@@ -2,13 +2,16 @@
 
 
 [[projects]]
+  digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
   name = "github.com/gorilla/websocket"
   packages = ["."]
-  revision = "ea4d1f681babbce9545c9c5f3d5194a789c89f5b"
-  version = "v1.2.0"
+  pruneopts = "UT"
+  revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
+  version = "v1.4.0"
 
 [[projects]]
-  branch = "feature/subscriptions"
+  branch = "master"
+  digest = "1:ff0333317e5ce03c571d19a3042a5a71d611b59e24eac37a4d1fb781aa7e79c3"
   name = "github.com/graph-gophers/graphql-go"
   packages = [
     ".",
@@ -24,39 +27,52 @@
     "introspection",
     "log",
     "relay",
-    "trace"
+    "trace",
   ]
-  revision = "cb1a8ec3ce857d5e8b77abae4c75942d473a716b"
-  source = "github.com/matiasanaya/graphql-go"
+  pruneopts = "UT"
+  revision = "940d2b01f2549ee5d9e87141ea909134bf56e3a9"
 
 [[projects]]
-  name = "github.com/matiasanaya/graphql-transport-ws"
+  branch = "master"
+  digest = "1:99c5655392a2eaf4f1e0240af14686d68f32a3b880e1566c8dca1a1881f1dc64"
+  name = "github.com/graph-gophers/graphql-transport-ws"
   packages = [
     "graphqlws",
     "graphqlws/event",
-    "graphqlws/internal/connection"
+    "graphqlws/internal/connection",
   ]
-  revision = "0c66d79b1c7623d4335c3b6e17090ebf15ce5ef3"
+  pruneopts = "UT"
+  revision = "374d1ed2bcc9040998c2abce4b97c6a7c5dc4d4b"
 
 [[projects]]
+  digest = "1:450b7623b185031f3a456801155c8320209f75d0d4c4e633c6b1e59d44d6e392"
   name = "github.com/opentracing/opentracing-go"
   packages = [
     ".",
     "ext",
-    "log"
+    "log",
   ]
+  pruneopts = "UT"
   revision = "1949ddbfd147afd4d964a9f00b24eb291e0e7c38"
   version = "v1.0.2"
 
 [[projects]]
   branch = "master"
+  digest = "1:76ee51c3f468493aff39dbacc401e8831fbb765104cbf613b89bef01cf4bad70"
   name = "golang.org/x/net"
   packages = ["context"]
+  pruneopts = "UT"
   revision = "1e491301e022f8f977054da4c2d852decd59571f"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7e47a26054ec4277778db83bef60e724980b58e9a9ef6cd10ce606e8719031cf"
+  input-imports = [
+    "github.com/gorilla/websocket",
+    "github.com/graph-gophers/graphql-go",
+    "github.com/graph-gophers/graphql-go/relay",
+    "github.com/graph-gophers/graphql-transport-ws/graphqlws",
+    "github.com/graph-gophers/graphql-transport-ws/graphqlws/event",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

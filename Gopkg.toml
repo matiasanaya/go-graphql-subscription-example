@@ -3,12 +3,11 @@
 
 [[constraint]]
   name = "github.com/graph-gophers/graphql-go"
-  source = "github.com/matiasanaya/graphql-go"
-  branch = "feature/subscriptions"
+  revision = "940d2b01f2549ee5d9e87141ea909134bf56e3a9"
 
 [[constraint]]
-  name = "github.com/matiasanaya/graphql-transport-ws"
-  revision = "0c66d79b1c7623d4335c3b6e17090ebf15ce5ef3"
+  name = "github.com/graph-gophers/graphql-transport-ws"
+  revision = "374d1ed2bcc9040998c2abce4b97c6a7c5dc4d4b"
 
 [prune]
   go-tests = true

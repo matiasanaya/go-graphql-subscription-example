@@ -7,8 +7,8 @@ import (
 
 	"github.com/gorilla/websocket"
 	graphql "github.com/graph-gophers/graphql-go"
-	"github.com/matiasanaya/graphql-transport-ws/graphqlws"
-	"github.com/matiasanaya/graphql-transport-ws/graphqlws/event"
+	"github.com/graph-gophers/graphql-transport-ws/graphqlws"
+	"github.com/graph-gophers/graphql-transport-ws/graphqlws/event"
 )
 
 // NewHandler returns a new Handler that supports both websocket and http transports
@@ -39,7 +39,7 @@ func newDefaultCallback(schema *graphql.Schema) *defaultCallback {
 }
 
 func (h *defaultCallback) OnOperation(ctx context.Context, args *event.OnOperationArgs) (json.RawMessage, func(), error) {
-	b, err := json.Marshal(args.StartMessage.Variables)
+	b, err := json.Marshal(args.Payload.Variables)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -51,7 +51,7 @@ func (h *defaultCallback) OnOperation(ctx context.Context, args *event.OnOperati
 	}
 
 	ctx, cancel := context.WithCancel(ctx)
-	c, err := h.schema.Subscribe(ctx, args.StartMessage.Query, args.StartMessage.OperationName, variables)
+	c, err := h.schema.Subscribe(ctx, args.Payload.Query, args.Payload.OperationName, variables)
 	if err != nil {
 		cancel()
 		return nil, nil, err
