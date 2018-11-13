@@ -12,7 +12,7 @@ import (
 
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
-	"github.com/matiasanaya/go-graphql-subscription-example/graphqlwshandler"
+	"github.com/graph-gophers/graphql-transport-ws/graphqlws"
 )
 
 const schema = `
@@ -64,7 +64,7 @@ func main() {
 	}
 
 	// graphQL handler
-	graphQLHandler := graphqlwshandler.NewHandler(s, &relay.Handler{Schema: s})
+	graphQLHandler := graphqlws.NewHandlerFunc(s, &relay.Handler{Schema: s})
 	http.HandleFunc("/graphql", graphQLHandler)
 
 	// start HTTP server
