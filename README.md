@@ -1,4 +1,5 @@
 # GraphQL subscription example
+[![Build Status](https://travis-ci.org/matiasanaya/go-graphql-subscription-example.svg?branch=master)](https://travis-ci.org/matiasanaya/go-graphql-subscription-example)
 
 This application uses:
 

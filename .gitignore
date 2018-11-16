@@ -11,3 +11,5 @@
 *.out
 
 vendor/
+go-graphql-subscription-example
+coverage.txt
