@@ -1,12 +1,19 @@
-### How to use
+# GraphQL subscription example
 
-First install the dependencies:
+This application uses:
 
-```
-dep ensure
-```
+* [github.com/graph-gophers/graphql-go](https://github.com/graph-gophers/graphql-go)
+* [github.com/graph-gophers/graphql-transport-ws](https://github.com/graph-gophers/graphql-transport-ws)
 
-Then run the application:
+## Pre-requisites
+
+**Requires Go 1.11.x** or above, which support Go modules. Read more about them [here](https://github.com/golang/go/wiki/Modules).
+
+Remember to set ```GO111MODULE=on```
+
+## How to use
+
+Run the application:
 
 ```
 go run main.go
@@ -33,7 +40,3 @@ mutation SayHello{
   }
 }
 ```
-
-### Dependencies
-
-* [Dep](https://github.com/golang/dep)
