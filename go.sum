@@ -4,8 +4,12 @@ github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
 github.com/graph-gophers/graphql-go v0.0.0-20181022222113-940d2b01f254 h1:Gd6QMlLJkeKotfK3HX2B6YkJNK5BWe0cLgPofJQNI4g=
 github.com/graph-gophers/graphql-go v0.0.0-20181022222113-940d2b01f254/go.mod h1:aRnZGurV3LlZ1Y+ygyx1mAV6OUfq+nu6OgpJ6jKgZ3g=
+github.com/graph-gophers/graphql-go v0.0.0-20181128220952-0079757a4d96 h1:vMgebmGw0XghaOezuKNqfPiNrCM/X6HgpqLx7GJZvxI=
+github.com/graph-gophers/graphql-go v0.0.0-20181128220952-0079757a4d96/go.mod h1:aRnZGurV3LlZ1Y+ygyx1mAV6OUfq+nu6OgpJ6jKgZ3g=
 github.com/graph-gophers/graphql-transport-ws v0.0.0-20181018011518-374d1ed2bcc9 h1:hfftVIOjhd6epw5K2yddl7/d6WkR8WeEthV5FNyzYLs=
 github.com/graph-gophers/graphql-transport-ws v0.0.0-20181018011518-374d1ed2bcc9/go.mod h1:mA6VjyefgI7zd37tC3zopb51mW39gSfnEoWvtnxsqKQ=
+github.com/graph-gophers/graphql-transport-ws v0.0.0-20181129022607-40b8cf7c0060 h1:B2EIwB0lR336zU77c8r/b5clIE5UcjZicUi6GjXcjdw=
+github.com/graph-gophers/graphql-transport-ws v0.0.0-20181129022607-40b8cf7c0060/go.mod h1:mA6VjyefgI7zd37tC3zopb51mW39gSfnEoWvtnxsqKQ=
 github.com/opentracing/opentracing-go v1.0.2 h1:3jA2P6O1F9UOrWVpwrIo17pu01KWvNWg4X946/Y5Zwg=
 github.com/opentracing/opentracing-go v1.0.2/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
